@@ -72,6 +72,7 @@ import com.example.sports.R
 import com.example.sports.data.LocalSportsDataProvider
 import com.example.sports.model.Sport
 import com.example.sports.ui.theme.SportsTheme
+import com.example.sports.utils.SportsContentType
 
 /**
  * Main composable that serves as container
@@ -83,7 +84,21 @@ fun SportsApp(
 ) {
     val viewModel: SportsViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsState()
+    val contentType: SportsContentType
 
+    when(windowSize){
+        WindowWidthSizeClass.Compact -> {
+            contentType = SportsContentType.ListOnly
+        }
+        WindowWidthSizeClass.Medium -> {
+            contentType = SportsContentType.ListAndDetail
+        }
+        WindowWidthSizeClass.Expanded -> {
+            contentType = SportsContentType.ListAndDetail
+        } else -> {
+        contentType = SportsContentType.ListOnly
+    }
+    }
     Scaffold(
         topBar = {
             SportsAppBar(
@@ -94,6 +109,7 @@ fun SportsApp(
     ) { innerPadding ->
         if (uiState.isShowingListPage) {
             SportsList(
+                contentType = contentType,
                 sports = uiState.sportsList,
                 onClick = {
                     viewModel.updateCurrentSport(it)
@@ -110,6 +126,7 @@ fun SportsApp(
             )
         } else {
             SportsDetail(
+                contentType = contentType,
                 selectedSport = uiState.currentSport,
                 contentPadding = innerPadding,
                 onBackPressed = {
@@ -241,6 +258,7 @@ private fun SportsListImageItem(sport: Sport, modifier: Modifier = Modifier) {
 
 @Composable
 private fun SportsList(
+    contentType: SportsContentType,
     sports: List<Sport>,
     onClick: (Sport) -> Unit,
     modifier: Modifier = Modifier,
@@ -262,6 +280,7 @@ private fun SportsList(
 
 @Composable
 private fun SportsDetail(
+    contentType: SportsContentType,
     selectedSport: Sport,
     onBackPressed: () -> Unit,
     contentPadding: PaddingValues,
@@ -348,6 +367,7 @@ private fun SportsDetail(
 
 @Composable
 fun SportsListAndDetail(
+    contentType: SportsContentType,
 sports: List<Sport>,
 selectedSport: Sport,
     //sportsUiState: SportsUiState,

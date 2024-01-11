@@ -107,9 +107,17 @@ fun SportsApp(
             )
         }
     ) { innerPadding ->
+        if(contentType == SportsContentType.ListAndDetail){
+            SportsListAndDetail(
+                sports = uiState.sportsList,
+                selectedSport = uiState.currentSport,
+           /*help*/     onClick = {
+               viewModel.updateCurrentSport(it)
+                },
+                onBackPressed = { /*TODO*/ })
+        }
         if (uiState.isShowingListPage) {
             SportsList(
-                contentType = contentType,
                 sports = uiState.sportsList,
                 onClick = {
                     viewModel.updateCurrentSport(it)
@@ -258,7 +266,6 @@ private fun SportsListImageItem(sport: Sport, modifier: Modifier = Modifier) {
 
 @Composable
 private fun SportsList(
-    contentType: SportsContentType,
     sports: List<Sport>,
     onClick: (Sport) -> Unit,
     modifier: Modifier = Modifier,
@@ -367,7 +374,6 @@ private fun SportsDetail(
 
 @Composable
 fun SportsListAndDetail(
-    contentType: SportsContentType,
 sports: List<Sport>,
 selectedSport: Sport,
     //sportsUiState: SportsUiState,

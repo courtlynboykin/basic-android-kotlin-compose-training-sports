@@ -348,20 +348,31 @@ private fun SportsDetail(
 
 @Composable
 fun SportsListAndDetail(
-    sportsUiState: SportsUiState,
+sports: List<Sport>,
+selectedSport: Sport,
+    //sportsUiState: SportsUiState,
     onClick: (Sport) -> Unit,
     onBackPressed: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
-    val sport = sportsUiState.currentSport
-    SportsList(
-        sports = sportsUiState.sportsList,
-        onClick = {
-            onClick(sport)
-        }
-    )
-    val activity = LocalContext.current as Activity
-    SportsDetail(selectedSport = sport, onBackPressed = { activity.finish() }, contentPadding = contentPadding)
+    Row(
+        modifier = modifier
+    ) {
+        SportsList(
+            sports = sports,
+            onClick = onClick,
+            contentPadding = contentPadding,
+            modifier = Modifier
+                .weight(2f)
+                .padding(horizontal = dimensionResource(R.dimen.padding_medium))
+        )
+        SportsDetail(
+            selectedSport = selectedSport,
+            onBackPressed = onBackPressed,
+            contentPadding = contentPadding
+        )
+    }
 }
 
 @Preview

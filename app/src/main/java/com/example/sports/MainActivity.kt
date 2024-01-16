@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
             SportsTheme {
                 Surface {
                     val windowSize = calculateWindowSizeClass(this)
-                    SportsApp(windowSize = windowSize.widthSizeClass)
+                    SportsApp(windowSize = windowSize.widthSizeClass, onBackPressed = { finish() } )
                 }
             }
         }
